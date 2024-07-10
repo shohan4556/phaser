@@ -13,7 +13,7 @@ const config = {
 const game = new Phaser.Game(config);
 
 // Variables for game objects and states
-var balloonContainers = [];
+var ballonsList = [];
 var letters = ["a", "b", "c", "d", "e"];
 
 // -------------------------------------- Preload
@@ -48,13 +48,17 @@ function create() {
     var x = Phaser.Math.Between(0, 800);
     var y = Phaser.Math.Between(0, 600);
 
-    var container = this.add.container(x, y);
+    const container = this.add.container(x, y);
+    container.setSize(80, 150);
 
-    var balloon = this.add.image(0, 0, "balloon").setDisplaySize(80, 150);
-    var textObj = this.add.text(0, -20, letters[i], txtStyle).setOrigin(0.5);
+    const balloon = this.add.image(0, 0, "balloon").setDisplaySize(80, 150);
+    balloon.setInteractive();
+    balloon.setName('balloon_' + letters[i]);
+    const textObj = this.add.text(0, -20, letters[i], txtStyle).setOrigin(0.5);
 
     container.add(balloon);
     container.add(textObj);
+    container.setName('container_' + letters[i]);
 
     // remove balloon by click
     container.setInteractive(
@@ -62,20 +66,21 @@ function create() {
       Phaser.Geom.Circle.Contains
     );
 
-    container.on("pointerdown", function () {
-      console.log("Balloon clicked");
+    balloon.on("pointerdown", (pt) => {
+      console.log("Balloon clicked", container.name);
       container.destroy();
+      // container.destroy();
     });
 
     // Store the container in the array
-    balloonContainers.push(container);
+    ballonsList.push(container);
   }
 }
 
 // -------------------------------------- Update
 function update() {
   // Move each balloon upwards
-  balloonContainers.forEach(function (container) {
+  ballonsList.forEach(function (container) {
     container.y -= 2;
 
     // Reset balloon position if it goes off the top of the screen
