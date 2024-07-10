@@ -56,8 +56,6 @@ function create() {
     container.add(balloon);
     container.add(textObj);
 
-    // Set container as interactive with a circular hit area
-
     // Store the container in the array
     balloonContainers.push(container);
   }
