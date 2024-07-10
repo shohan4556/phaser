@@ -56,6 +56,17 @@ function create() {
     container.add(balloon);
     container.add(textObj);
 
+    // remove balloon by click
+    container.setInteractive(
+      new Phaser.Geom.Circle(0, 0, 40),
+      Phaser.Geom.Circle.Contains
+    );
+
+    container.on("pointerdown", function () {
+      console.log("Balloon clicked");
+      container.destroy();
+    });
+
     // Store the container in the array
     balloonContainers.push(container);
   }
@@ -63,7 +74,7 @@ function create() {
 
 // -------------------------------------- Update
 function update() {
-  // Move each balloon container upwards
+  // Move each balloon upwards
   balloonContainers.forEach(function (container) {
     container.y -= 2;
 
